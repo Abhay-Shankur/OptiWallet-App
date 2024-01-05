@@ -19,25 +19,35 @@ class _ScanPageState extends State<ScanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan QR Code'),
+        title: const Text('Scan QR Code'),
       ),
       body: Column(
         children: [
-          Expanded(
-            child: QRView(
-              key: _qrKey,
-              onQRViewCreated: _onQRViewCreated,
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.blue,
+                width: 2.0,
+              ),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            margin: const EdgeInsets.all(20.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width - 40,
+                height: MediaQuery.of(context).size.width - 40,
+                child: QRView(
+                  key: _qrKey,
+                  onQRViewCreated: _onQRViewCreated,
+                ),
+              ),
             ),
           ),
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
           Text(
             'Extracted Text: $_extractedText',
-            style: TextStyle(fontSize: 16.0),
-          ),
-          SizedBox(height: 20.0),
-          ElevatedButton(
-            onPressed: _scanned ? _handleVerify : null,
-            child: Text('Verify'),
+            style: const TextStyle(fontSize: 16.0),
           ),
         ],
       ),
@@ -53,25 +63,24 @@ class _ScanPageState extends State<ScanPage> {
       setState(() {
         _extractedText = scanData.code!;
         _scanned = true;
+        _showExtractionDialog(); // Show extraction dialog directly
       });
     });
   }
 
-  void _handleVerify() {
-    // Handle verification logic here
-    // For example, show a dialog with the extracted text
+  void _showExtractionDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Verification Result'),
-          content: Text('Extracted Text: $_extractedText'),
+          title: const Text('Extracted Text'),
+          content: Text('$_extractedText'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );

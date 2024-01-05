@@ -14,7 +14,7 @@ class DemoApp extends StatelessWidget {
     return MaterialApp(
       title: 'Optiwallet Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue, // Set your desired primary color
+        primarySwatch: Colors.purple, // Set your desired primary color
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: DemoHomePage(),
@@ -30,13 +30,15 @@ class DemoHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Optiwallet'),
+        centerTitle: true
+        ,
       ),
       drawer: Drawer(
         child: ListView(
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.black, // Black color for a memory-like strip
+                color: Colors.blueAccent, // Black color for a memory-like strip
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
