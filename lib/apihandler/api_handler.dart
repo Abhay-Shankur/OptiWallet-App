@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  late String authToken;
-  final String baseUrl = 'https://api.entity.hypersign.id';
+  late String _authToken;
+  final String baseUrl = 'https://api.entity.dashboard.hypersign.id';
   final String oauthEndpoint = '/api/v1/app/oauth';
-  final String apiUrl = 'https://ent_7d1d2a9.api.entity.hypersign.id/';
+  final String apiUrl = 'https://ent-27e3656.api.entity.hypersign.id';
   final String didCreateEndpoint = '/api/v1/did/create';
   final String didRegisterEndpoint = '/api/v1/did/register';
   final String presentationEndpoint = '/api/v1/presentation';
@@ -25,7 +25,7 @@ class ApiService {
   Future<void> postOAuthApi() async {
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
-      'X-Api-Secret-Key': '8e160eaf60f98031d2987b236a8e4.c1f5715c66c7effeab03c2074dc96c68522fa28af58b9607eeba37cf902d721817c3afe10485d6e375341a83c4ad1fe55',
+      'X-Api-Secret-Key': '137cbaf5df879c434cba0ea48402c.6abbad0bd95fe918a60e6540403d4f93b253bcd074137938f7f78ad00b3223774c070a01e99c6495013ec1397fdb63565',
     };
 
     try {
@@ -36,7 +36,7 @@ class ApiService {
       );
 
       Map<String, dynamic> res = _handleResponse(response);
-      authToken = "${res['tokenType'] as String} ${res['access_token'] as String}";
+      _authToken = "${res['tokenType'] as String} ${res['access_token'] as String}";
 
       // res['token'];
 
@@ -52,8 +52,10 @@ class ApiService {
       await postOAuthApi();
 
       final Map<String, String> headers = {
+        'origin': '*',
+        'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': authToken
+        'Authorization': _authToken
       };
 
       final Map<String, dynamic> requestBody = {'namespace': namespace};
@@ -76,8 +78,10 @@ class ApiService {
       await postOAuthApi();
 
       final Map<String, String> headers = {
+        'origin': '*',
+        'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': authToken
+        'Authorization': _authToken
       };
 
       final response = await http.post(
@@ -98,15 +102,17 @@ class ApiService {
       await postOAuthApi();
 
       final Map<String, String> headers = {
+        'origin': '*',
+        'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': authToken
+        'Authorization': _authToken
       };
 
       Map<String,dynamic> presentation = {
         'credentialDocuments': [
-          requestBody['credentialDocument']
+          requestBody
         ],
-        "holderDid": requestBody['credentialDocuments']['credentialSubject']['id'] as String,
+        "holderDid": requestBody['credentialSubject']['id'] as String,
         "challenge": "OptiSecure",
         "domain": "optisync.com"
       };
@@ -129,8 +135,10 @@ class ApiService {
       await postOAuthApi();
 
       final Map<String, String> headers = {
+        'origin': '*',
+        'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': authToken
+        'Authorization': _authToken
       };
 
       final response = await http.post(
@@ -148,8 +156,10 @@ class ApiService {
 
   Future<Map<String, dynamic>> postRequest(String endPoint, Map<String, dynamic> requestBody) async {
     final Map<String, String> headers = {
+      'origin': '*',
+      'accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': authToken
+      'Authorization': _authToken
     };
 
     try {
@@ -158,8 +168,8 @@ class ApiService {
       await postOAuthApi();
 
       // Check if authentication was successful
-      if (authToken.isNotEmpty) {
-        headers['Authorization'] = 'Bearer $authToken';
+      if (_authToken.isNotEmpty) {
+        headers['Authorization'] = 'Bearer $_authToken';
 
         // Now, proceed with the main request
         final response = await http.post(

@@ -16,7 +16,8 @@ dependencies:
   firebase_auth: ^4.16.0
   cloud_firestore: ^4.14.0
   firebase_database: ^10.4.0
-  firebase_storage: ^11.6.0
+  firebase_messaging: ^14.7.10
+  flutter_local_notifications: ^16.3.2
   firebase_analytics: ^10.8.0
   qr_code_scanner: 1.0.1
   fluttertoast: ^8.0.7
@@ -25,11 +26,8 @@ dependencies:
   http: ^1.1.2
   path_provider: ^2.1.1
   provider: ^6.1.1
-#  lottie: ^1.1.0 # Use the latest version available
-  flutter_svg: ^0.22.0
-#  fluttertoast: ^8.0.8
-#  flushbar: ^1.10.4
   lottie: ^1.0.1
+  shared_preferences: ^2.2.2
 
 
 

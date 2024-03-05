@@ -171,14 +171,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _login() async {
-    String email = _emailController.value.text.toString();
-    String password = _passwordController.value.text.toString();
+    // String email = _emailController.value.text.toString();
+    // String password = _passwordController.value.text.toString();
+    String email = 'abhayshankur1@gmail.com';
+    String password = 'demo3812';
     try {
       debugPrint('Email: $email, Password: $password');
       User? userCredential = await _authHandler.signInWithEmailAndPassword(email, password);
       if (userCredential != null) {
         // Successfully signed in
-        debugPrint('User logged in: ${userCredential.displayName}');
+        debugPrint('User logged in: ${userCredential.uid}');
         // Set the authentication status to true
         Provider.of<MyAuthProvider>(context, listen: false).setUser(userCredential);
         // Navigate to the home screen
@@ -190,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
       User? userCredential = await _authHandler.signUpWithEmailAndPassword(email, password);
       if (userCredential != null) {
         // Successfully signed in
-        debugPrint('User signed in: ${userCredential.displayName}');
+        debugPrint('User signed in: ${userCredential.uid}');
         // Set the authentication status to true
         Provider.of<MyAuthProvider>(context, listen: false).setUser(userCredential);
         // Navigate to the home screen

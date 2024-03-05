@@ -41,65 +41,23 @@ Future<bool> getDocumentData(
     }
 
     Map<String, dynamic>? user = await firestoreHandler.getDocument('USER', email);
+    if(!(user!.containsKey('credentials'))) {
+      _showToast('No Credentials Found!');
+      return false;
+    }
     List<dynamic> creds = user?['credentials'];
     debugPrint('Credential list: $creds');
     for (var id in creds) {
       Map<String, dynamic>? data = await firestoreHandler.getDocument('Credentials', id as String);
-      await saveDataAsJson(data!, id as String);
+      await saveDataAsJson(data!, id);
       // Notify the caller (UI) about the download completion
       if (downloadCallback != null) {
         downloadCallback(data);
       }
     }
-
-    // for(String id in creds){
-    //   Map<String, dynamic>? data = await firestoreHandler.getDocument('Credentials', id);
-    //   await saveDataAsJson(data!, id);
-    //   // Notify the caller (UI) about the download completion
-    //   if (downloadCallback != null) {
-    //     downloadCallback(data);
-    //   }
-    // }
     _showToast('Data saved successfully');
     firestoreHandler.closeFirestore();
     return true;
-
-    // CollectionReference<Map<String, dynamic>> collection = FirebaseFirestore.instance.collection(collectionId);
-    //
-    // DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await collection.doc(documentId).get();
-    //
-    // if (documentSnapshot.exists) {
-    //   Map<String, dynamic> data = documentSnapshot.data()!;
-    //   await saveDataAsJson(data, documentId);
-    //   _showToast('Data saved successfully');
-    //
-    //   // Notify the caller (UI) about the download completion
-    //   if (downloadCallback != null) {
-    //     downloadCallback(data);
-    //   }
-    //
-    //   return data;
-    // } else {
-    //   showDialog(
-    //     context: localContext,
-    //     builder: (BuildContext context) {
-    //       return AlertDialog(
-    //         title: const Text('Document Not Found'),
-    //         content: Text('The document with ID $documentId does not exist.'),
-    //         actions: <Widget>[
-    //           TextButton(
-    //             onPressed: () {
-    //               Navigator.of(context).pop();
-    //             },
-    //             child: const Text('OK'),
-    //           ),
-    //         ],
-    //       );
-    //     },
-    //   );
-
-      // return {};
-    // }
   } catch (e) {
     _showToast('Error fetching document: $e');
     debugPrint('Error while getting Credentials');

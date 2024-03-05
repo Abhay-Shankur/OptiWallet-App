@@ -1,5 +1,6 @@
 // main.dart
 import 'package:OptiWallet/firebasehandles/auth_provider.dart';
+import 'package:OptiWallet/firebasehandles/firebase_notification.dart';
 import 'package:OptiWallet/pages/login.dart';
 // import 'package:OptiWallet/pages/login_page.dart';
 import 'package:OptiWallet/pages/splash_screen.dart';
@@ -10,11 +11,16 @@ import 'package:OptiWallet/pages/home_page.dart';
 import 'package:provider/provider.dart';
 // Import the SplashScreen file
 
+
+late final FirebaseApp app;
+final navigator = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
+  app = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseMessagingHandler().initNotifications();
   runApp(
     ChangeNotifierProvider(
       create: (context) => MyAuthProvider(),
@@ -45,6 +51,7 @@ class _MainAppState extends State<MainApp> {
       home: const SplashScreen(),
       // home: const HomePage(),
       // initialRoute: '/login',
+      navigatorKey: navigator,
       routes: {
         '/splash': (context) => const SplashScreen(),
         '/login': (context) => const LoginPage(),

@@ -98,19 +98,23 @@ class _ScanPageState extends State<ScanPage> {
         Map<String, dynamic> vc = filteredJsonFiles.first;
         if(vc.containsKey("credentialDocument") && vc["credentialDocument"].isNotEmpty){
           var credentialDocument = vc["credentialDocument"];
+          // debugPrint("Credential Document: $credentialDocument");
 
           // TODO:Using Verifiable Credentials
-          // ApiService apiService = ApiService();
-          // Map<String,dynamic> response = await apiService.postSubmitPresentation(vc);
-          // response = await apiService.postVerifyPresentation(response);
-          // Map<String, dynamic> data = {
-          //   'VCId': credentialDocument['id'].toString(),
-          //   'verified': response['verified']
-          // };
+          ApiService apiService = ApiService();
+          Map<String,dynamic> response = await apiService.postSubmitPresentation(credentialDocument);
+          // debugPrint("Presentation: $response");
+          response = await apiService.postVerifyPresentation(response);
+          // debugPrint("Verify: $response");
           Map<String, dynamic> data = {
             'VCId': credentialDocument['id'].toString(),
-            'verified': true
+            'verified': response['presentationResult']['verified'] as bool
           };
+          debugPrint('Result: $data');
+          // Map<String, dynamic> data = {
+          //   'VCId': credentialDocument['id'].toString(),
+          //   'verified': true
+          // };
 
           debugPrint("VC : ${credentialDocument['id'].toString()}");
           String collection = 'Tokens';
