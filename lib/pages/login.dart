@@ -1,9 +1,7 @@
-import 'package:OptiWallet/firebasehandles/auth_provider.dart';
-import 'package:OptiWallet/firebasehandles/firebase_auth.dart';
+import 'package:OptiWallet/firebaseHandlers/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -171,10 +169,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _login() async {
-    // String email = _emailController.value.text.toString();
-    // String password = _passwordController.value.text.toString();
-    String email = 'abhayshankur1@gmail.com';
-    String password = 'demo3812';
+    String email = _emailController.value.text.toString();
+    String password = _passwordController.value.text.toString();
+    // String email = 'abhayshankur1@gmail.com';
+    // String password = 'demo3812';
     try {
       debugPrint('Email: $email, Password: $password');
       User? userCredential = await _authHandler.signInWithEmailAndPassword(email, password);
@@ -182,24 +180,25 @@ class _LoginPageState extends State<LoginPage> {
         // Successfully signed in
         debugPrint('User logged in: ${userCredential.uid}');
         // Set the authentication status to true
-        Provider.of<MyAuthProvider>(context, listen: false).setUser(userCredential);
+        // Provider.of<MyAuthProvider>(context, listen: false).setUser(userCredential);
         // Navigate to the home screen
         navigateTo('/home');
       } else {
         showDialogBox('Login User', 'login Failed');
       }
     } catch (e) {
-      User? userCredential = await _authHandler.signUpWithEmailAndPassword(email, password);
-      if (userCredential != null) {
-        // Successfully signed in
-        debugPrint('User signed in: ${userCredential.uid}');
-        // Set the authentication status to true
-        Provider.of<MyAuthProvider>(context, listen: false).setUser(userCredential);
-        // Navigate to the home screen
-        navigateTo('/home');
-      } else {
-        showDialogBox('Login User', 'login Failed');
-      }
+      // debugPrint('Email: $email, Password: $password');
+      // User? userCredential = await _authHandler.signUpWithEmailAndPassword(email, password);
+      // if (userCredential != null) {
+      //   // Successfully signed in
+      //   debugPrint('User signed in: ${userCredential.uid}');
+      //   // Set the authentication status to true
+      //   // Provider.of<MyAuthProvider>(context, listen: false).setUser(userCredential);
+      //   // Navigate to the home screen
+      //   navigateTo('/home');
+      // } else {
+      //   showDialogBox('Login User', 'login Failed');
+      // }
       debugPrint('Error in Login $e');
     }
   }
@@ -223,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
         // Successfully signed in
         debugPrint('User signed in: ${userCredential.user?.phoneNumber}');
         // Set the authentication status to true
-        Provider.of<MyAuthProvider>(context, listen: false).setLoggedIn(true);
+        // Provider.of<MyAuthProvider>(context, listen: false).setLoggedIn(true);
 
         // Navigate to the home screen
         navigateTo('/home');

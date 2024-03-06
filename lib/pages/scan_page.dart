@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:OptiWallet/apihandler/api_handler.dart';
 import 'package:OptiWallet/download.dart';
-import 'package:OptiWallet/firebasehandles/firestore_handler.dart';
+import 'package:OptiWallet/firebaseHandlers/firestore_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -111,10 +111,6 @@ class _ScanPageState extends State<ScanPage> {
             'verified': response['presentationResult']['verified'] as bool
           };
           debugPrint('Result: $data');
-          // Map<String, dynamic> data = {
-          //   'VCId': credentialDocument['id'].toString(),
-          //   'verified': true
-          // };
 
           debugPrint("VC : ${credentialDocument['id'].toString()}");
           String collection = 'Tokens';
@@ -132,9 +128,6 @@ class _ScanPageState extends State<ScanPage> {
           _showDialogBox(title: 'Verifying Identity', content: 'Cannot get credentialDocument');
         }
       } else {
-        // FirebaseDbOperations firebaseDbOperations = FirebaseDbOperations(Firebase.app());
-        // await firebaseDbOperations.addKeyValuePair('/Tokens/${extractedText['token']}', 'VCId', 'Invalid Identity!');
-        // await firebaseDbOperations.addKeyValuePair('/Tokens/${extractedText['token']}', 'verified', false);
         _showDialogBox(title: 'Verifying Identity', content: "You don't have required Identity !");
       }
 

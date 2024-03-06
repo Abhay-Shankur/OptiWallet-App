@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:OptiWallet/firebasehandles/firestore_handler.dart';
+import 'package:OptiWallet/firebaseHandlers/firestore_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -45,7 +45,7 @@ Future<bool> getDocumentData(
       _showToast('No Credentials Found!');
       return false;
     }
-    List<dynamic> creds = user?['credentials'];
+    List<dynamic> creds = user['credentials'];
     debugPrint('Credential list: $creds');
     for (var id in creds) {
       Map<String, dynamic>? data = await firestoreHandler.getDocument('Credentials', id as String);

@@ -1,3 +1,4 @@
+import 'package:OptiWallet/firebaseHandlers/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -24,7 +25,11 @@ class _SplashScreenState extends State<SplashScreen> {
     // Use Future.delayed to navigate to the login page after a specified duration
     Future.delayed(const Duration(seconds: 6), () {
       // Replace '/login' with the actual route for your login page
-      Navigator.pushReplacementNamed(context, '/login');
+      if(FirebaseAuthOperations(context: context).isUserSignedIn()){
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
     });
   }
 

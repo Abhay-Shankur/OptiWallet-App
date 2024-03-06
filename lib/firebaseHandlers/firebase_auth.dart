@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:OptiWallet/apihandler/api_handler.dart';
-import 'package:OptiWallet/firebasehandles/auth_provider.dart';
-import 'package:OptiWallet/firebasehandles/firestore_handler.dart';
+import 'package:OptiWallet/firebaseHandlers/firestore_handler.dart';
+import 'package:OptiWallet/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebaseAuthOperations {
@@ -26,58 +25,6 @@ class FirebaseAuthOperations {
       fontSize: 16.0,
     );
   }
-
-  // Map<String, dynamic> createMap() {
-  //   // Assuming your JSON file is named 'your_file.json'
-  //   // Specify the file path
-  //   // String filePath = 'create.json';
-  //   //
-  //   // // Load the JSON file
-  //   // String jsonString = File(filePath as List<Object>).readAsStringSync();
-  //   //
-  //   // // Parse the JSON string into a Map
-  //   // Map<String, dynamic> jsonMap = json.decode(jsonString);
-  //   // // Convert the JSON string to a Dart Map
-  //   // Map<String, dynamic> jsonData = convert.jsonDecode(jsonString);
-  //
-  //   Map<String,dynamic> map = {
-  //     "context": [
-  //       "https://www.w3.org/ns/did/v1",
-  //       "https://w3id.org/security/suites/ed25519-2020/v1"
-  //     ],
-  //     "id": "did:hid:testnet:z6MkfExumxD1j2nnt4oxoyjAgmJ7SPxjroTkSLnZiziZxt7H",
-  //     "controller": [
-  //       "did:hid:testnet:z6MkfExumxD1j2nnt4oxoyjAgmJ7SPxjroTkSLnZiziZxt7H"
-  //     ],
-  //     "alsoKnownAs": [
-  //       "did:hid:testnet:z6MkfExumxD1j2nnt4oxoyjAgmJ7SPxjroTkSLnZiziZxt7H"
-  //     ],
-  //     "verificationMethod": [
-  //       {
-  //         "id": "did:hid:testnet:z6MkfExumxD1j2nnt4oxoyjAgmJ7SPxjroTkSLnZiziZxt7H#key-1",
-  //         "type": "Ed25519VerificationKey2020",
-  //         "controller": "did:hid:testnet:z6MkfExumxD1j2nnt4oxoyjAgmJ7SPxjroTkSLnZiziZxt7H",
-  //         "publicKeyMultibase": "z6MkfExumxD1j2nnt4oxoyjAgmJ7SPxjroTkSLnZiziZxt7H",
-  //         "blockchainAccountId": ""
-  //       }
-  //     ],
-  //     "authentication": [
-  //       "did:hid:testnet:z6MkfExumxD1j2nnt4oxoyjAgmJ7SPxjroTkSLnZiziZxt7H#key-1"
-  //     ],
-  //     "assertionMethod": [
-  //       "did:hid:testnet:z6MkfExumxD1j2nnt4oxoyjAgmJ7SPxjroTkSLnZiziZxt7H#key-1"
-  //     ],
-  //     "keyAgreement": [],
-  //     "capabilityInvocation": [
-  //       "did:hid:testnet:z6MkfExumxD1j2nnt4oxoyjAgmJ7SPxjroTkSLnZiziZxt7H#key-1"
-  //     ],
-  //     "capabilityDelegation": [
-  //       "did:hid:testnet:z6MkfExumxD1j2nnt4oxoyjAgmJ7SPxjroTkSLnZiziZxt7H#key-1"
-  //     ],
-  //     "service": []
-  //   };
-  //   return map;
-  // }
 
   Future<User?> createDidUser(UserCredential userCredential) async {
     try {
@@ -192,11 +139,9 @@ class FirebaseAuthOperations {
     } catch (e) {
       // If sign-in fails, check the error code to determine the reason
       if (e is FirebaseAuthException) {
-        if (e.code == 'user-not-found') {
+        if (e.code == 'user-not-found' || e.code == 'invalid-credential') {
           // The email is not registered
-          debugPrint('In user-not-found');
-          // return await signUpWithEmailAndPassword(email, password);
-        } else if (e.code == 'invalid-credential') {
+          debugPrint('Error Code: ${e.code}');
           return await signUpWithEmailAndPassword(email, password);
         } else {
           debugPrint('Error signing in: ${e.code}');
@@ -275,10 +220,6 @@ class FirebaseAuthOperations {
 
 
   // Sign out
-  void signOutProvider() {
-    Provider.of<MyAuthProvider>(context).setLoggedIn(false);
-    Provider.of<MyAuthProvider>(context).setUser(null);
-  }
   Future<void> signOut() async {
     try {
       // Obtain shared preferences.
@@ -293,7 +234,7 @@ class FirebaseAuthOperations {
       await _auth.signOut();
       print('User signed out');
       showToast('User signed out');
-      signOutProvider();
+      Navigator.of(context).pop();
     } catch (e) {
       print('Error signing out: $e');
       showToast('Error signing out: $e');

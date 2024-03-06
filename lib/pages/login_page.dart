@@ -1,9 +1,7 @@
-import 'package:OptiWallet/firebasehandles/auth_provider.dart';
-import 'package:OptiWallet/firebasehandles/firebase_auth.dart';
+import 'package:OptiWallet/firebaseHandlers/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -220,7 +218,7 @@ class _LoginPageState extends State<LoginPage> {
         // Successfully signed in
         debugPrint('User signed in: ${userCredential.user?.phoneNumber}');
         // Set the authentication status to true
-        Provider.of<MyAuthProvider>(context, listen: false).setLoggedIn(true);
+        // Provider.of<MyAuthProvider>(context, listen: false).setLoggedIn(true);
 
         // Navigate to the home screen
         navigateTo('/home');

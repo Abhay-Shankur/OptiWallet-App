@@ -1,4 +1,4 @@
-import 'package:OptiWallet/firebasehandles/firebase_auth.dart';
+import 'package:OptiWallet/firebaseHandlers/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:OptiWallet/pages/scan_page.dart';
 import 'package:OptiWallet/download.dart';
@@ -79,6 +79,13 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
+            ListTile(
+              title: const Text('Log Out'),
+              onTap: () {
+                FirebaseAuthOperations(context: context).signOut();
+                Navigator.pop(context);
+              },
+            ),
           ],
         ),
       ),
@@ -118,6 +125,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
 
   Widget buildCard(Map<String, dynamic> jsonData) {
     return Card(
@@ -249,6 +257,7 @@ class _HomePageState extends State<HomePage> {
       // await getDocumentData(context,"did:hid:namespace:.......................");
 
       String? email= FirebaseAuthOperations(context: context).getUserEmail();
+      debugPrint('User Email: $email');
       await getDocumentData(
           email!,
           collectionId: "Credentials");
