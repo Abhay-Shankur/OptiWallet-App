@@ -2,6 +2,8 @@ import 'package:OptiWallet/firebaseHandlers/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:OptiWallet/pages/scan_page.dart';
 import 'package:OptiWallet/download.dart';
+
+import '../firebaseHandlers/firestore_handler.dart';
 // ... (Your existing imports)
 
 class HomePage extends StatefulWidget {
@@ -13,13 +15,24 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late List<Map<String, dynamic>> jsonDataList;
+  late String? _did;
 
   @override
   void initState() {
     super.initState();
     _loadData();
+    _getDID();
   }
 
+  Future _getDID() async {
+    String? email= FirebaseAuthOperations(context: context).getUserEmail();
+    FirestoreHandler firestoreHandler = FirestoreHandler();
+    Map<String, dynamic>? user = await firestoreHandler.getDocument('USER', email!);
+    setState(() {
+      _did = user!['did'];
+    });
+    firestoreHandler.closeFirestore();
+  }
   Future<void> _loadData() async {
     try {
       List<Map<String, dynamic>> data = await getAllJsonMaps();
@@ -45,21 +58,22 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: ListView(
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
+            DrawerHeader(
+              decoration: const BoxDecoration(
                 color: Colors.grey,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
+                  const Text(
                     'OptiWallet',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24.0,
                     ),
                   ),
+                  Text(_did!),
                 ],
               ),
             ),
